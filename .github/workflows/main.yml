@@ -24,15 +24,17 @@ jobs:
         env:
           CI: true
           FORCE_COLOR: 1
+      - name: Compile TS code
+        run: yarn lerna run tsc
 
       - name: Eslint
         run: yarn eslint . --ext .js --ext .ts
       - name: Test inquirer package (current version)
         run: yarn lerna exec npm test --scope inquirer
+      - name: Test type definitions
+        run: yarn tsc -p tsconfig.test.json
       - name: Test monorepo packages (new version)
-        run: |
-          yarn lerna run tsc
-          yarn jest
+        run: yarn jest
 
       - name: Upload code coverage
         uses: codecov/codecov-action@v2
